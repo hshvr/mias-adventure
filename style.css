@@ -1,0 +1,21 @@
+body {
+    background: black;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#canvas1 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 5px solid white;
+    max-width: 100%;
+    max-height: 100%;
+
+}
+
+#PlayerImage, #BGImage1, #BGImage2, #BGImage3, #Enemy_Image {
+    display: none;
+}
