@@ -14,34 +14,33 @@ window.addEventListener('load', function() {
     // Modify InputHandler class to include touch controls
     class InputHandler {
         constructor() {
-            this.keys = []; // Array to track currently pressed keys
-
+            this.keys = []; // Tracks pressed keys
+    
             // Keyboard controls
             window.addEventListener('keydown', e => {
-                if ((e.key === 'ArrowDown' || 
-                     e.key === 'ArrowUp' || 
-                     e.key === 'ArrowLeft' || 
-                     e.key === 'ArrowRight') && 
-                     this.keys.indexOf(e.key) === -1) {
-                    this.keys.push(e.key); // Add key if not already in array
-                }  else if (e.key === 'Enter' && gameOver) restartGame()
-            });
-
-            window.addEventListener('keyup', e => {
-                if (e.key === 'ArrowDown' || 
-                    e.key === 'ArrowUp' || 
-                    e.key === 'ArrowLeft' || 
-                    e.key === 'ArrowRight') {
-                    this.keys.splice(this.keys.indexOf(e.key), 1); // Remove key from array
+                if ((e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') && 
+                    !this.keys.includes(e.key)) {
+                    this.keys.push(e.key);
                 }
             });
-
-            // Touch controls for jumping
-            canvas.addEventListener('touchstart', e => {
-                console.log('up');
+    
+            window.addEventListener('keyup', e => {
+                this.keys = this.keys.filter(key => key !== e.key);
             });
+    
+            // Touch controls
+            canvas.addEventListener('touchstart', e => {
+                e.preventDefault(); // Prevent default touch behavior
+                if (!input.keys.includes('ArrowUp')) input.keys.push('ArrowUp');
+            });
+            
+            canvas.addEventListener('touchend', e => {
+                e.preventDefault(); // Prevent default touch behavior
+                input.keys = input.keys.filter(key => key !== 'ArrowUp');
+            });            
         }
     }
+    
 
     // Class representing the player character
     // Class representing the player character
@@ -106,7 +105,8 @@ window.addEventListener('load', function() {
                 this.frameTimer += deltaTime;
             }
 
-            if (input.keys.indexOf('ArrowUp') > -1 && this.onGround()) {
+            // controls
+            if (input.keys.indexOf('ArrowUp') > -1 || input.keys.indexOf('up') > -1 && this.onGround()) {
                 this.vy = -30; // Apply jump force
             }
 
